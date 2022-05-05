@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+<h1>{{ product.name }}</h1>
+<hr>
+Description: <small>{{product.description}}</small><br>
+Price: $<small>{{product.price}}</small><br>
+
+{% if product.is_aviable == True %}
+    Aviable: <small>yes</small><br>
+    
+    {% if request.user.is_staff %}
+        Stock: <small>{{product.stock}}</small><br>
+    {% endif %}
+{% else %}
+    Aviable: <small>no</small><br>
+{% endif %}
+<br><hr>
+<a href="{% url 'product-update' product.id %}">Update</a>
+<a href="{% url 'product-delete' product.id %}">Delete</a>
+    
+
+{% endblock content %}
+    

@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+    
+    {% for obj in product %}
+    <div>
+        <a href="{% url 'product-detail' obj.id %}">{{ obj.name }}</a>
+    </div>        
+    {% endfor %} 
+        
+
+{% endblock content %}
+    

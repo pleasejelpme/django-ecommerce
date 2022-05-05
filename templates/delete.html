@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block content %}
+<div>
+    <form action="" method="POST">
+        {% csrf_token %}
+        <p>"{{ obj }}" will be deleted. Are you sure?</p>
+        <a href="{{ request.META.HTTP_REFERED }}">Go back</a>
+        <input type="submit" value="Confirm">
+    </form>
+</div>
+  
+{% endblock content %}
