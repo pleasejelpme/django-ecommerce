@@ -1,0 +1,36 @@
+<!-- Categories dropdown -->
+<ul id="slide-out" class="sidenav">
+    {% for category in categories %}
+    <li><a href="">{{category}}</a></li>
+    <li class="divider"></li>
+    {% endfor %}
+</ul>
+
+<div class="nav-wrapper">
+    <div class="row">
+        <div class="col s1">
+            <a href="" data-target="slide-out" class="btn sidenav-trigger">side nav</a>
+        </div>
+        <div class="col s1">
+            <a href="{% url 'home' %}" class="brand-logo">Logo</a>
+        </div>
+        <div class="col s3">
+            <!-- Dropdown trigger -->
+            <form action="" method="GET">
+                <input type="text" name="q" placeholder="Search">
+            </form>
+        </div>
+        <div class="col s6">
+            <ul id="nav-mobile" class="right hide-on-med-and-down">
+                {% if request.user.is_authenticated %}
+                <li><a href="{% url 'logout' %}"><i class="material-icons">logout</i></a></li>
+                {% else %}
+                <li><a href="{% url 'login' %}"><i class="material-icons">login</i></a></li>
+                <li><a href="{% url 'register' %}"><i class="material-icons">person_add</i></a></li>
+                {% endif %}
+            </ul>
+        </div>
+
+        <div class="col s1"></div>
+    </div>
+</div>

@@ -13,7 +13,7 @@ class Product(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     name = models.CharField(max_length=50)
     tags = TaggableManager()
-    price = models.FloatField()
+    price = models.DecimalField(max_digits=20, decimal_places=2)
     description = models.TextField(default='', null=True, blank=True)
     stock = models.PositiveIntegerField()
 
@@ -49,5 +49,11 @@ class Order(models.Model):
 
     def __str__(self):
         return self.product + ' | ' + self.customer + ' | ' + self.quantity
+
+
+
+    
+
+
 
 

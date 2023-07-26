@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block main %}
+<div>
+    <h2>{{product}}</h2>
+    <ul>
+        <li>Price: ${{product.price}}</li>
+        <li>Stock {{product.stock}}</li>
+    </ul>
+</div>
+{% endblock main %}
