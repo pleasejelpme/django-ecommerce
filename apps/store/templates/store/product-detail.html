@@ -1,10 +1,18 @@
 {% extends "base.html" %}
 {% block main %}
-<div>
-    <h2>{{product}}</h2>
-    <ul>
-        <li>Price: ${{product.price}}</li>
-        <li>Stock {{product.stock}}</li>
-    </ul>
+<div class="container">
+    <div class="row">
+        <div class="col s4">
+            <img src="{{product.image.url}}" height="300px" width="300px">
+        </div>
+        <div class="col s6">
+            <h2>{{product}}</h2>
+            <ul>
+                <li>Price: ${{product.price}}</li>
+                <li>Stock {{product.stock}}</li>
+            </ul>
+            <button data-product="{{product.id}}" data-action="add" id="update-cart">Add to cart</button>
+        </div>
+    </div>
 </div>
 {% endblock main %}

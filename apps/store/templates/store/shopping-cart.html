@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block main %}
+<div class="container">
+    <h2>Shopping cart</h2>
+    <h3>Total products: {{order.get_total_products}}</h3>
+    <h3>Total order price: ${{order.get_order_price}}</h3>
+
+    {% for item in products %}
+    <ul>
+        <li>{{item.product.name}}</li>
+        <li>${{item.product.price}}</li>
+        <li>{{item.date_added}}</li>
+        <li>{{item.quantity}}</li>
+        <h5>total: ${{item.get_total_price}}</h5>
+    </ul>
+    <hr>
+    {% endfor %}
+</div>
+{% endblock main %}

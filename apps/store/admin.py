@@ -1,8 +1,10 @@
 from django.contrib import admin
-from .models import Category, Product, Order
+from .models import Category, Product, Order, ProductOrder, ShippingAdress
 
 admin.site.register(Category)
 admin.site.register(Order)
+admin.site.register(ProductOrder)
+admin.site.register(ShippingAdress)
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
