@@ -1,19 +1,65 @@
 {% extends "base.html" %}
 {% block main %}
-<div class="container">
-    <h2>Shopping cart</h2>
-    <h3>Total products: {{order.get_total_products}}</h3>
-    <h3>Total order price: ${{order.get_order_price}}</h3>
+<div class="row">
+    <div class="col s12">
+        <h2>Your shopping cart</h2>
+        <span>Total products: {{order.get_total_products}}</span>
+    </div>
+</div>
+<div class="row">
+    <div class="col s12 m8">
+        <div class="row">
+            <div class="col s12">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>Price</th>
+                            <th>Quantity</th>
+                            <th>Added at</th>
+                            <th>Total</th>
+                            <th></th>
+                        </tr>
+                    </thead>
 
-    {% for item in products %}
-    <ul>
-        <li>{{item.product.name}}</li>
-        <li>${{item.product.price}}</li>
-        <li>{{item.date_added}}</li>
-        <li>{{item.quantity}}</li>
-        <h5>total: ${{item.get_total_price}}</h5>
-    </ul>
-    <hr>
-    {% endfor %}
+                    <tbody>
+                        {% for item in products %}
+                        <tr>
+                            <td><strong>{{item.product.name}}</strong></td>
+                            <td>${{item.product.price}}</td>
+                            <td>{{item.quantity}}</td>
+                            <td>{{item.date_added}}</td>
+                            <td><strong>${{item.get_total_price}}</strong></td>
+                            <td>
+                                <div>
+                                    <a class="btn-floating btn-medium green update-cart"
+                                        data-product="{{item.product.id}}" data-action="add"><i
+                                            class="material-icons">add</i></a>
+                                    <a class="btn-floating btn-medium red update-cart"
+                                        data-product="{{item.product.id}}" data-action="remove"><i
+                                            class="material-icons">remove</i></a>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+
+                </table>
+            </div>
+
+        </div>
+    </div>
+    <div class="col s12 m4">
+        <div class="card grey lighten-2">
+            <div class="card-content">
+                <span class="card-title">
+                    <h3>Total order price: ${{order.get_order_price}}</h3>
+                </span>
+            </div>
+            <div class="card-action center">
+                <a href="{% url 'shipping-address' order.id%}"><button class="btn green">Go to checkout</button></a>
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock main %}

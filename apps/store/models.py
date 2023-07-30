@@ -70,7 +70,7 @@ class ProductOrder(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
     date_added = models.DateTimeField(auto_now_add=True)
-    quantity = models.PositiveIntegerField(default=1)
+    quantity = models.PositiveIntegerField(default=0)
 
 
     ### Calculates the total price of the products in an order
@@ -84,18 +84,30 @@ class ProductOrder(models.Model):
     ### if the quantity of products ordered is equal to 0 or if the quantity of 
     ### products ordered exceed the stock available.
     def save(self, *args, **kwargs):
-        if self.quantity > self.product.stock or self.quantity == 0 or self.stock == 0:
+        if self.quantity > self.product.stock or self.product.stock == 0:
             return
         else:
             super().save(*args, **kwargs)
 
+    def __str__(self):
+        return 'Product: ' + self.product.name + ' | Quantity: ' + str(self.quantity) 
+
 class ShippingAdress(models.Model):
+    PAYMENT_CHOICES = [
+        ('PP', 'PayPal'),
+        ('ZL', 'Zelle'),
+        ('BT', 'Bank Transfer')
+    ]
+
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
     address = models.CharField(max_length=200)
     city = models.CharField(max_length=200)
     state = models.CharField(max_length=200)
+    payment_method = models.CharField(max_length=2, choices=PAYMENT_CHOICES, default='PP')
     date_added = models.DateTimeField(auto_now_add=True)
+    
+
     
     def __str__(self):
         return self.address

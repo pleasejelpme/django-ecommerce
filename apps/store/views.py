@@ -2,10 +2,11 @@ from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from django.db.models import Q
 from django.contrib import messages
-from .models import Product, Category, Order
+from .models import Product, Category, Order, ProductOrder
 from apps.customers.models import Customer
 from django.contrib.auth.decorators import login_required
-from .forms import ProductCreateForm
+from .forms import ProductCreateForm, ShippingAddressForm
+import json
 
 
 def home(request):
@@ -53,9 +54,51 @@ def shopping_cart(request):
     context = {'products': products, 'order': order}
     return render(request, 'store/shopping-cart.html', context)
 
+@login_required(login_url='login')
 def update_shopping_cart(request):
-    return JsonResponse('Product added: ', safe=False)
+    if request.method == 'POST':
+        customer = request.user.customer
+        data = json.loads(request.body)
+        product_id = data['product_id']
+        action = data['action']
+        product = Product.objects.get(id=product_id)
 
+        order, created = Order.objects.get_or_create(customer=customer)
+        product_order, created = ProductOrder.objects.get_or_create(order=order, product=product)
+
+        if action == 'add':
+            try:
+                product_order.quantity < product.stock
+            except:
+                raise ValueError('Not enough stock')
+            product_order.quantity = product_order.quantity + 1
+        elif action == 'remove':
+            product_order.quantity = product_order.quantity - 1           
+
+        product_order.save()
+
+        if product_order.quantity <= 0:
+            product_order.delete()
+
+        print('Product: ', product_id, 'Action: ', action)
+
+    return JsonResponse('Product added', safe=False)
+
+@login_required(login_url='login')
+def shipping_address(request, pk):
+    customer = request.user.customer
+    order = Order.objects.get(id=pk)
+    form = ShippingAddressForm()
+    if request.method == 'POST':
+        form = ShippingAddressForm(request.POST)
+        if form.is_valid():
+            form = form.save(commit=False)
+            form.customer = customer
+            form.order = order
+            form.save()
+
+    context = {'form': form, 'order': order}
+    return render(request, 'store/shippin-address.html', context)
 
     
 

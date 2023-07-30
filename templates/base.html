@@ -12,6 +12,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script type="text/javascript">
         let user = '{{ request.user }}'
+
+        function getToken(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+        const csrftoken = getToken('csrftoken');
+
+        document.addEventListener('DOMContentLoaded', function () {
+            var elems = document.querySelectorAll('select');
+            var instances = M.FormSelect.init(elems, options);
+        });
     </script>
 </head>
 
@@ -22,14 +44,12 @@
         </nav>
     </div>
     <main>
-        <div class="row">
-            <div class="col s2">
-                {% block aside %}
-                {% endblock aside %}
-            </div>
-            <div class="col s10">
-                {% block main %}
-                {% endblock main %}
+        <div class="container">
+            <div class="row">
+                <div class="col s12">
+                    {% block main %}
+                    {% endblock main %}
+                </div>
             </div>
         </div>
     </main>

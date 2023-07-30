@@ -18,11 +18,21 @@
     {% endif %}
 
 </div>
-<div>
+<div class="row">
     <ul>
         {% if products %}
         {% for product in products %}
-        <li><a href="{% url 'product-detail' product.id %}">{{product}}</a></li>
+        <div class="col s12 m6 l4">
+            <div class="card-panel">
+                <h5><a href="{% url 'product-detail' product.id %}">{{product}}</a></h5>
+                <a href="{% url 'product-detail' product.id %}"><img src="{{product.image.url}}" alt="" width="250px"
+                        height="250px"></a>
+                {% if product.stock > 0 %}
+                <button data-product="{{product.id}}" data-action="add" class="update-cart">Add to cart</button>
+                {% endif %}
+            </div>
+        </div>
+
         {% endfor %}
         {% else %}
         <p>No products found</p>
