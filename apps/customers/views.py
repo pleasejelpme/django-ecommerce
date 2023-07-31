@@ -3,6 +3,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+import sweetify
 
 def register_user(request):
     form = UserCreationForm()
@@ -14,6 +15,7 @@ def register_user(request):
             user.save()
             login(request, user)
             messages.success(request, 'User registered succsefully!')
+            return redirect('home')
         else:
             messages.error(request, 'An error ocurred during the registration')
 
@@ -22,6 +24,9 @@ def register_user(request):
 
 
 def login_user(request):
+    if request.user.is_authenticated:
+        return redirect('home')
+    
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
@@ -29,7 +34,7 @@ def login_user(request):
 
         if user is not None:
             login(request, user)
-            messages.success(request, 'Welcome ' + user.username + '!')
+            sweetify.success(request, 'Welcome ' + user.username , timer=2000)
             return redirect('home')
         else:
             messages.error(request, 'Username or password invalid, try again')

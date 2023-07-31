@@ -52,6 +52,9 @@ INSTALLED_APPS = [
     'apps.store.apps.StoreConfig',
     'rest_framework',
     'taggit',
+    'crispy_forms',
+    'crispy_bootstrap4',
+    'sweetify',
     'django_extensions',
 ]
 
@@ -145,3 +148,7 @@ MEDIA_URL = '/images/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 TAGGIT_CASE_INSENSITIVE = True
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+SWEETIFY_SWEETALERT_LIBRARY = 'sweetalert2'

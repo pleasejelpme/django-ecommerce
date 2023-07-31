@@ -1,7 +1,7 @@
-from django.forms import ModelForm
+from django import forms
 from .models import Product, ShippingAdress
 
-class ProductCreateForm(ModelForm):
+class ProductCreateForm(forms.ModelForm):
     class Meta:
         model = Product
         fields = [
@@ -13,12 +13,12 @@ class ProductCreateForm(ModelForm):
             'stock'
         ]
 
-class ShippingAddressForm(ModelForm):
+class ShippingAddressForm(forms.ModelForm):
     class Meta:
         model = ShippingAdress
         fields = [
             'address',
             'city',
             'state',
-            'payment_method'
+            'payment_method',
         ]

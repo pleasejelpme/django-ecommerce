@@ -7,6 +7,7 @@ from apps.customers.models import Customer
 from django.contrib.auth.decorators import login_required
 from .forms import ProductCreateForm, ShippingAddressForm
 import json
+import sweetify
 
 
 def home(request):
@@ -24,6 +25,12 @@ def home(request):
     context = {'products': products, 'categories': categories}
     return render(request, 'home.html', context)
 
+
+def category_list(request):
+    context = {
+        'categories': Category.objects.all()
+    }
+    return render(request, 'aside.html', context)
 
 def product_detail(request, pk):
     product = Product.objects.get(id=pk)
@@ -65,6 +72,8 @@ def update_shopping_cart(request):
 
         order, created = Order.objects.get_or_create(customer=customer)
         product_order, created = ProductOrder.objects.get_or_create(order=order, product=product)
+        if created:
+            sweetify.success(request, 'Product added to the cart', timer=2000)
 
         if action == 'add':
             try:
@@ -72,6 +81,8 @@ def update_shopping_cart(request):
             except:
                 raise ValueError('Not enough stock')
             product_order.quantity = product_order.quantity + 1
+
+
         elif action == 'remove':
             product_order.quantity = product_order.quantity - 1           
 
@@ -98,7 +109,7 @@ def shipping_address(request, pk):
             form.save()
 
     context = {'form': form, 'order': order}
-    return render(request, 'store/shippin-address.html', context)
+    return render(request, 'store/checkout.html', context)
 
     
 

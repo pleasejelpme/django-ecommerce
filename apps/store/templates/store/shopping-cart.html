@@ -1,63 +1,68 @@
 {% extends "base.html" %}
 {% block main %}
 <div class="row">
-    <div class="col s12">
-        <h2>Your shopping cart</h2>
+    <div class="col-sm-12">
+        <h4>Your shopping cart</h4>
         <span>Total products: {{order.get_total_products}}</span>
     </div>
 </div>
-<div class="row">
-    <div class="col s12 m8">
-        <div class="row">
-            <div class="col s12">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Product</th>
-                            <th>Price</th>
-                            <th>Quantity</th>
-                            <th>Added at</th>
-                            <th>Total</th>
-                            <th></th>
-                        </tr>
-                    </thead>
+<div class="row d-flex justify-content-center">
+    <div class="col-sm-12 col-md-8">
+        <table class="table table-success table-striped table-hover table-borderless">
+            <thead>
+                <tr>
+                    <th>Product</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                    <th>Added at</th>
+                    <th>Total</th>
+                    <th></th>
+                </tr>
+            </thead>
 
-                    <tbody>
-                        {% for item in products %}
-                        <tr>
-                            <td><strong>{{item.product.name}}</strong></td>
-                            <td>${{item.product.price}}</td>
-                            <td>{{item.quantity}}</td>
-                            <td>{{item.date_added}}</td>
-                            <td><strong>${{item.get_total_price}}</strong></td>
-                            <td>
-                                <div>
-                                    <a class="btn-floating btn-medium green update-cart"
-                                        data-product="{{item.product.id}}" data-action="add"><i
-                                            class="material-icons">add</i></a>
-                                    <a class="btn-floating btn-medium red update-cart"
-                                        data-product="{{item.product.id}}" data-action="remove"><i
-                                            class="material-icons">remove</i></a>
-                                </div>
-                            </td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
+            <tbody>
+                {% for item in products %}
+                <tr>
+                    <td><strong><a href="{% url 'product-detail' item.product.id %}">{{item.product.name}}</a></strong>
+                    </td>
+                    <td>${{item.product.price}}</td>
+                    <td>{{item.quantity}}</td>
+                    <td>{{item.date_added}}</td>
+                    <td><strong>${{item.get_total_price}}</strong></td>
+                    <td>
+                        <div>
+                            <button data-product="{{item.product.id}}" data-action="add"
+                                class="btn btn-success card-link update-cart"><i class="fa-solid fa-plus"
+                                    style="color: #ffffff;"></i></button>
+                            <button data-product="{{item.product.id}}" data-action="remove"
+                                class="btn btn-danger card-link update-cart"><i class="fa-solid fa-minus"
+                                    style="color: #ffffff;"></i></button>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
 
-                </table>
-            </div>
+        </table>
 
-        </div>
+
+
     </div>
-    <div class="col s12 m4">
+    <div class="col-sm-12 col-md-4">
         <div class="card grey lighten-2">
             <div class="card-content">
                 <span class="card-title">
-                    <h3>Total order price: ${{order.get_order_price}}</h3>
+                    <h4>Total order price: ${{order.get_order_price}}</h4>
                 </span>
             </div>
             <div class="card-action center">
-                <a href="{% url 'shipping-address' order.id%}"><button class="btn green">Go to checkout</button></a>
+                <a href="{% url 'checkout' order.id%}">
+                    <button data-product="{{product.id}}" data-action="add"
+                        class="btn btn-success card-link update-cart">
+                        <i class="fa-solid fa-credit-card fa-lg" style="color: #ffffff;">
+                        </i> Checkout
+                    </button>
+                </a>
             </div>
         </div>
     </div>
