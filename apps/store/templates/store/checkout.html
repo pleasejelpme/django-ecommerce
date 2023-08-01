@@ -3,54 +3,59 @@
 
 {% block main %}
 <div class="row">
-    <div class="col s12 m12 l7">
-        <div class="card grey lighten-3">
-            <div class="card-content">
-                <div class="card-title center">
-                    <h4>Checkout</h4>
-                    <hr>
+    <div class="col-md-12 col-xl-7">
+        <span class="h4">Checkout</span>
+        <hr>
+        <form action="" method="post" class="form">
+            {% csrf_token %}
+            <div class="row">
+                <div class="col-sm-12 col-md-6 mb-3">
+                    {{form.state|as_crispy_field}}
                 </div>
-                <div class="card-content">
-                    <form action="" method="post">
-                        {% csrf_token %}
-                        {% crispy form %}
-                    </form>
+                <div class="col-sm-12 col-md-6 mb-3">
+                    {{form.city|as_crispy_field}}
+                </div>
+                <div class="col-sm-12 mb-3">
+                    {{form.address|as_crispy_field}}
+                </div>
+                <div class="col-sm-12 mb-3">
+                    {{form.payment_method|as_crispy_field}}
                 </div>
             </div>
-        </div>
-
+            <button class="btn btn-success" type="submit">Complete purchase</button>
+        </form>
     </div>
 
-    <div class="col s12 m12 l5">
-        <div class="card grey lighten-3">
-            <div class="card-content">
-                <div class="card-title center">
-                    <h4>Your order</h4>
-                    <hr>
-                </div>
-                <div class="card-content">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Product</th>
-                                <th>Cuantity</th>
-                                <th>Price</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for item in order.productorder_set.all %}
-                            <tr>
-                                <td>{{item.product.name}}</td>
-                                <td>{{item.quantity}}</td>
-                                <td>{{item.get_total_price}}</td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                    <h4>Total: ${{order.get_order_price}}</h4>
-                </div>
-            </div>
-        </div>
+    <div class="col-md-12 col-xl-5">
+        <h4>Your order</h4>
+        <hr>
+        <table class="table table-success table-striped table-hover table-borderless">
+            <thead>
+                <tr>
+                    <th>Product</th>
+                    <th>Cuantity</th>
+                    <th>Price</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in order.productorder_set.all %}
+                <tr>
+                    <td><a href="{% url 'product-detail' item.product.id %}">{{item.product.name}}</a></td>
+                    <td>{{item.quantity}}</td>
+                    <td>{{item.get_total_price}}</td>
+                </tr>
+                {% endfor %}
+                <tr>
+                    <td>
+                        <h4>Total: </h4>
+                    </td>
+                    <td></td>
+                    <td>
+                        <h4>${{order.get_order_price}}</h4>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 </div>
 <script>

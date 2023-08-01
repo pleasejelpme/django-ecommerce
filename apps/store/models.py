@@ -1,6 +1,8 @@
 from django.db import models
 from apps.customers.models import Customer
 from taggit.managers import TaggableManager
+from django.db.models.signals import pre_save, post_save
+from django.dispatch import receiver
 
 class Category(models.Model):
     name = models.CharField(max_length=50)
@@ -92,7 +94,7 @@ class ProductOrder(models.Model):
     def __str__(self):
         return 'Product: ' + self.product.name + ' | Quantity: ' + str(self.quantity) 
 
-class ShippingAdress(models.Model):
+class Checkout(models.Model):
     PAYMENT_CHOICES = [
         ('PP', 'PayPal'),
         ('ZL', 'Zelle'),
@@ -106,8 +108,21 @@ class ShippingAdress(models.Model):
     state = models.CharField(max_length=200)
     payment_method = models.CharField(max_length=2, choices=PAYMENT_CHOICES, default='PP')
     date_added = models.DateTimeField(auto_now_add=True)
-    
-
+    transfer_reference = models.CharField(max_length=50, null=True, blank=True)
     
     def __str__(self):
         return self.address
+    
+
+
+#################
+#### SIGNALS ####
+#################
+@receiver(post_save, sender=Checkout)
+def update_product_stock(sender, instance, created, *args, **kwargs):
+    order_products = instance.order.productorder_set.all()
+    for product in order_products:
+        old_stock = product.product.stock
+        new_stock = old_stock - product.quantity
+        Product.objects.filter(id=product.product.id).update(stock=new_stock)
+        Order.objects.filter(id=instance.order.id).update(completed=True)

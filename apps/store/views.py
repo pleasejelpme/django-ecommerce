@@ -5,7 +5,7 @@ from django.contrib import messages
 from .models import Product, Category, Order, ProductOrder
 from apps.customers.models import Customer
 from django.contrib.auth.decorators import login_required
-from .forms import ProductCreateForm, ShippingAddressForm
+from .forms import ProductCreateForm, CheckoutForm
 import json
 import sweetify
 
@@ -99,14 +99,15 @@ def update_shopping_cart(request):
 def shipping_address(request, pk):
     customer = request.user.customer
     order = Order.objects.get(id=pk)
-    form = ShippingAddressForm()
+    form = CheckoutForm()
     if request.method == 'POST':
-        form = ShippingAddressForm(request.POST)
+        form = CheckoutForm(request.POST)
         if form.is_valid():
-            form = form.save(commit=False)
-            form.customer = customer
-            form.order = order
-            form.save()
+            checkout = form.save(commit=False)
+            checkout.customer = customer
+            checkout.order = order
+            checkout.save()
+            sweetify.success(request, 'Payment completed!')
 
     context = {'form': form, 'order': order}
     return render(request, 'store/checkout.html', context)
