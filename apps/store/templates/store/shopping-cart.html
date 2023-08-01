@@ -49,6 +49,7 @@
 
     </div>
     <div class="col-sm-12 col-md-4">
+        {% if order.get_total_products > 0 %}
         <div class="card grey lighten-2" style="height: 100%;">
             <div class="card-body">
                 <span class="card-title">
@@ -69,6 +70,7 @@
                 </a>
             </div>
         </div>
+        {% endif %}
     </div>
 </div>
 {% endblock main %}

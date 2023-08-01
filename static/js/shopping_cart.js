@@ -41,4 +41,3 @@ function updateUserOrder(product_id, action){
     })
 }
 
-

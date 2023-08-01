@@ -10,7 +10,8 @@
             <li>Price: ${{product.price}}</li>
             <li>Stock {{product.stock}}</li>
         </ul>
-        {% if product.stock > 0 and request.user.is_authenticated%}
+        {% if product.stock > 0 %}
+        {% if request.user.is_authenticated%}
         <button data-product="{{product.id}}" data-action="add" class="btn btn-success card-link update-cart"><i
                 class="fa-solid fa-cart-plus fa-lg" style="color: #ffffff;"></i> Add to
             cart</button>
@@ -20,6 +21,8 @@
                 Add to
                 cart</button></a>
         {% endif %}
+        {% endif %}
+
     </div>
 </div>
 
