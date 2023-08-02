@@ -45,20 +45,17 @@
 <body class="d-flex flex-column min-vh-100">
 
     <!-- Navigation bar -->
-    <nav class="navbar justify-content-around navbar-light" style="background-color: hsl(122, 53%, 82%);">
-        {% include "nav.html" %}
-    </nav>
+    {% include "nav.html" %}
+
 
     <div class="content-wrapper" style="margin-top: 50px; margin-bottom: 50px;">
-        <div class=" row">
+        <div class="row">
 
             <!-- Aside content -->
-            <aside class="col-xs-12 col-sm-2 d-flex">
-                {% include "aside.html" %}
-            </aside>
+
 
             <!-- Main content -->
-            <div class="col-xs-12 col-sm-10">
+            <div class="col">
                 <main class="container-sm">
                     <!-- Main page content -->
                     {% block main %}

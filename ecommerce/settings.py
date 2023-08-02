@@ -47,7 +47,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    
+
     'apps.customers.apps.CustomersConfig',
     'apps.store.apps.StoreConfig',
     'rest_framework',
@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     'crispy_forms',
     'crispy_bootstrap4',
     'sweetify',
+    'phonenumber_field',
     'django_extensions',
 ]
 

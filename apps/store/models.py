@@ -65,7 +65,7 @@ class Order(models.Model):
         return Order.objects.filter(customer=customer_id).order_by('-created_at')
 
     def __str__(self):
-        return str(str(self.id) + ' | completed: ' + str(self.completed))
+        return f'{self.id} | Completed: {self.completed}'
 
 
 class ProductOrder(models.Model):
@@ -92,7 +92,7 @@ class ProductOrder(models.Model):
             super().save(*args, **kwargs)
 
     def __str__(self):
-        return 'Product: ' + self.product.name + ' | Quantity: ' + str(self.quantity)
+        return f'Product: {self.product.name} | Quantity: {str(self.quantity)}'
 
 
 class Checkout(models.Model):

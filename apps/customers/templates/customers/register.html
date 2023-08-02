@@ -1,9 +1,23 @@
 {% extends "base.html" %}
+{% load crispy_forms_tags %}
 
 {% block main %}
-<form action="" method="POST">
-    {% csrf_token %}
-    {{form.as_p}}
-    <input type="submit" value="Register">
-</form>
+<div class="row d-flex justify-content-center">
+    <div class="col-sm-12 col-md-6 col-xl-4">
+        <form action="" method="POST" class="form">
+            {% csrf_token %}
+            <div class="mb-3">{{form.username | as_crispy_field}}</div>
+            <div class="mb-3">{{form.password1 | as_crispy_field}}</div>
+            <div class="mb-5">{{form.password2 | as_crispy_field}}</div>
+
+            <div class="mb-5 d-flex justify-content-center">
+                <button type="submit" class="btn btn-primary">Register</button>
+            </div>
+            <div class="d-flex justify-content-center flex-column">
+                <p class="fst-italic text-muted text-center">Already have an account?</p>
+                <a href="{% url 'login' %}" class="btn btn-outline-primary">Login</a>
+            </div>
+        </form>
+    </div>
+</div>
 {% endblock main %}

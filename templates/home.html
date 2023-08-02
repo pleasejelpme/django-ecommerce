@@ -1,17 +1,10 @@
 {% extends "base.html" %}
 
-{% block aside %}
-<h3>Categories
-</h3>
-<ul>
-    <li><a href="{% url 'home' %}">All</a></li>
-    {% for category in categories %}
-    <li><a href="{% url 'home' %}?q={{category}}">{{category}}</a></li>
-    {% endfor %}
-</ul>
-{% endblock aside %}
 
 {% block main %}
+
+{% include "offcanvas.html" %}
+
 <div class="row aling-items-center gy-5 justify-content-center">
     {% if products %}
     {% for product in products %}

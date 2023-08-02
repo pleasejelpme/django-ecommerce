@@ -1,17 +1,18 @@
+import json
+import sweetify
+
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from django.db.models import Q
-from django.contrib import messages
-from .models import Product, Category, Order, ProductOrder
 from django.contrib.auth.decorators import login_required
+
+from .models import Product, Category, Order, ProductOrder
 from .forms import ProductCreateForm, CheckoutForm
-import json
-import sweetify
 
 
 def home(request):
     q = request.GET.get('q')
-    if q == None:
+    if q is None:
         products = Product.objects.all()
     else:
         products = Product.objects.filter(
@@ -27,9 +28,10 @@ def home(request):
 
 def category_list(request):
     context = {
-        'categories': Category.objects.all()
+        'categories': Category.objects.all(),
+        'total_products': Product.objects.count(),
     }
-    return render(request, 'aside.html', context)
+    return render(request, 'offcanvas.html', context)
 
 
 def product_detail(request, pk):
@@ -45,10 +47,10 @@ def product_create(request):
         form = ProductCreateForm(request.POST)
         if form.is_valid():
             form.save()
-            messages.success(request, 'Product added successfully')
+            sweetify.success(request, 'Product added successfully')
             return redirect('home')
         else:
-            messages.error(request, 'An error ocurred')
+            sweetify.error(request, 'An error ocurred')
 
     context = {'form': form}
     return render(request, 'store/product-create.html', context)
@@ -108,7 +110,10 @@ def checkout(request, pk):
     if order.get_total_products == 0:
         return redirect('home')
 
-    form = CheckoutForm()
+    form = CheckoutForm(initial={
+        'address': customer.address
+    })
+
     if request.method == 'POST':
         form = CheckoutForm(request.POST)
         if form.is_valid():
