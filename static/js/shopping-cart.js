@@ -9,7 +9,6 @@ function getBtnValues(btn) {
         btn[index].addEventListener('click', function(){
             const product = this.dataset.product
             const action = this.dataset.action
-            console.log('product id: ', product, 'action: ', action)
             updateUserOrder(product, action)
         })
     }    

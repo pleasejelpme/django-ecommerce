@@ -72,6 +72,7 @@ def update_shopping_cart(request):
     if request.method == 'POST':
         customer = request.user.customer
         data = json.loads(request.body)
+        print(data)
         product_id = data['product_id']
         action = data['action']
         product = Product.objects.get(id=product_id)
@@ -84,16 +85,20 @@ def update_shopping_cart(request):
             sweetify.success(request, 'Product added to the cart', timer=2000)
 
         if action == 'add':
-            try:
-                product_order.quantity < product.stock
-            except:
-                sweetify.error(request, 'Not enough stock')
-            product_order.quantity = product_order.quantity + 1
+            if product_order.quantity == product.stock:
+                sweetify.warning(
+                    request, 'Maximum products available!', timer=2000)
+            else:
+                product_order.quantity = product_order.quantity + 1
+                product_order.save()
 
-        elif action == 'remove':
+        if action == 'remove':
             product_order.quantity = product_order.quantity - 1
+            product_order.save()
 
-        product_order.save()
+        if action == 'clear':
+            print('clear')
+            product_order.delete()
 
         if product_order.quantity <= 0:
             product_order.delete()
