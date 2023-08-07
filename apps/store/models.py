@@ -37,7 +37,7 @@ class Product(models.Model):
 
 
 class Order(models.Model):
-    customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
+    customer = models.ForeignKey(Customer, on_delete=models.RESTRICT)
     created_at = models.DateTimeField(auto_now_add=True)
     completed = models.BooleanField(default=False)
     transaction_id = models.CharField(max_length=100, null=True)
@@ -61,8 +61,12 @@ class Order(models.Model):
 
     # Function that return the customer orders ordered by the creation date.
     @staticmethod
-    def get_order_by_customer(customer_id):
-        return Order.objects.filter(customer=customer_id).order_by('-created_at')
+    def get_order_by_customer(customer_id, *args, **kwargs):
+        return Order.objects.filter(customer=customer_id, *args, **kwargs).order_by('-created_at')
+
+    @staticmethod
+    def get_active_order_by_customer(customer_id):
+        return Order.objects.get(customer=customer_id, completed=False)
 
     def __str__(self):
         return f'{self.id} | Completed: {self.completed}'

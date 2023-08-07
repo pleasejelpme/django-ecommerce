@@ -5,11 +5,21 @@
         <img src=" {{product.image.url}}" height="300px" width="300px">
     </div>
     <div class="col-sm-12 col-md-6">
-        <h2>{{product}}</h2>
-        <ul>
-            <li>Price: ${{product.price}}</li>
-            <li>Stock {{product.stock}}</li>
-        </ul>
+        <div>
+            <h2>{{product}}</h2>
+        </div>
+        <div>
+            {% for tag in product.tags.names %}
+            <a href="{% url 'home' %}?q={{tag}}"><span class="badge bg-secondary">{{tag}}</span></a>
+            {% endfor %}
+        </div>
+        <div>
+            <ul>
+                <li>Price: ${{product.price}}</li>
+                <li>Stock {{product.stock}}</li>
+            </ul>
+        </div>
+
         {% if product.stock > 0 %}
         {% if request.user.is_authenticated%}
         <button data-product="{{product.id}}" data-action="add" class="btn btn-success card-link update-cart"><i

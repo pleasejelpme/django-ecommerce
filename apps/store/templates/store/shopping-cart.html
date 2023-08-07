@@ -20,7 +20,7 @@
                 </tr>
             </thead>
 
-            <tbody>
+            <tbody id="shopping-cart-products">
                 {% for item in products %}
                 <tr>
                     <td><strong><a href="{% url 'product-detail' item.product.id %}">{{item.product.name}}</a></strong>

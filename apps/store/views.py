@@ -22,7 +22,20 @@ def home(request):
         ).distinct()
 
     categories = Category.objects.all()
-    context = {'products': products, 'categories': categories}
+    context = {
+        'products': products,
+        'categories': categories,
+    }
+
+    # FUNCTIONALITY TO BE IMPLEMENTED: The "add to cart" button should not be
+    # shown if the customer already have the product in their shopping cart
+
+    # if request.user.is_authenticated:
+    #     customer = request.user.customer
+    #     products_in_order = Order.get_active_order_by_customer(
+    #         customer).productorder_set.all()
+    #     context['products_in_order'] = products_in_order
+
     return render(request, 'home.html', context)
 
 
@@ -58,32 +71,30 @@ def product_create(request):
 
 @login_required(login_url='login')
 def shopping_cart(request):
-    customer = request.user.customer
-    order, created = Order.objects.get_or_create(
-        customer=customer, completed=False)
-    products = order.productorder_set.all()
-
-    context = {'products': products, 'order': order}
-    return render(request, 'store/shopping-cart.html', context)
-
-
-@login_required(login_url='login')
-def update_shopping_cart(request):
     if request.method == 'POST':
         customer = request.user.customer
         data = json.loads(request.body)
-        print(data)
-        product_id = data['product_id']
-        action = data['action']
+        try:
+            product_id, action = data.get('product_id'), data.get('action')
+        except:
+            print('error')
+
         product = Product.objects.get(id=product_id)
         order, created = Order.objects.get_or_create(
             customer=customer, completed=False)
         product_order, created = ProductOrder.objects.get_or_create(
             order=order, product=product)
 
+        #  It checks if it is the first time that the product is added to
+        #  the shopping cart and sends a messsage
         if created:
             sweetify.success(request, 'Product added to the cart', timer=2000)
 
+
+#  Checks the button that was clicked (add, remove or clear)
+
+        #  If the action is add checks if there is enough stock of the
+        #  product, otherwise sends a message of not enough stock
         if action == 'add':
             if product_order.quantity == product.stock:
                 sweetify.warning(
@@ -92,20 +103,36 @@ def update_shopping_cart(request):
                 product_order.quantity = product_order.quantity + 1
                 product_order.save()
 
+        #  If the action is remove it removes 1 product from the total
+        #  in the shopping cart
         if action == 'remove':
             product_order.quantity = product_order.quantity - 1
             product_order.save()
 
+        #  If the action is clear it removes all individual products
+        #  from the shopping cart
         if action == 'clear':
             print('clear')
             product_order.delete()
 
+        #  It checks if the quantity of the product is zero, and if it
+        #  is zero then the product is removed from the shopping cart
         if product_order.quantity <= 0:
             product_order.delete()
 
-        print('Product: ', product_id, 'Action: ', action)
+        return JsonResponse(data, safe=False)
 
-    return JsonResponse('Product added', safe=False)
+    if request.method == 'GET':
+        customer = request.user.customer
+        order, created = Order.objects.get_or_create(
+            customer=customer, completed=False)
+        products = list(order.productorder_set.all())
+
+        context = {
+            'order': order,
+            'products': products
+        }
+        return render(request, 'store/shopping-cart.html', context)
 
 
 @login_required(login_url='login')

@@ -1,11 +1,8 @@
 const updateBtn = document.getElementsByClassName('update-cart')
-const URL = 'http://localhost:8000/store/'
 
 getBtnValues(updateBtn)
-
-
 function getBtnValues(btn) {
-    for (let index = 0; index < btn.length; index++) {
+     for (let index = 0; index < btn.length; index++) {
         btn[index].addEventListener('click', function(){
             const product = this.dataset.product
             const action = this.dataset.action
@@ -14,12 +11,10 @@ function getBtnValues(btn) {
     }    
 }
 
-
 function updateUserOrder(product_id, action){
-    let url = URL + 'update-cart/'
     console.log('Sending data...')
 
-    fetch(url, {
+    fetch('http://localhost:8000/store/cart/', {
         method: 'POST',
         headers: {
             'Content-Type':'application/json',
@@ -31,7 +26,7 @@ function updateUserOrder(product_id, action){
         })
     })
 
-    .then((response) => {
+    .then ((response) => {
         return response.json()
     })
 
@@ -39,4 +34,3 @@ function updateUserOrder(product_id, action){
         location.reload()
     })
 }
-

@@ -14,14 +14,23 @@
                     class="card-img top rounded" height="250px"></a>
             <div class="card-body">
                 <h5 class="card-title"><a href="{% url 'product-detail' product.id %}">{{product}}</a></h5>
+                <div>
+                    {% for tag in product.tags.names %}
+                    <a href="{% url 'home' %}?q={{tag}}"><span class="badge bg-secondary">{{tag}}</span></a>
+                    {% endfor %}
+                </div>
                 <div class="card-text">
                     ${{product.price}}
                 </div>
+
+
                 {% if product.stock > 0 %}
                 <button data-product="{{product.id}}" data-action="add" class="btn btn-success card-link update-cart"><i
                         class="fa-solid fa-cart-plus fa-lg" style="color: #ffffff;"></i> Add to
                     cart</button>
                 {% endif %}
+
+
             </div>
         </div>
     </div>
