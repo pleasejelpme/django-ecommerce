@@ -48,7 +48,6 @@ INSTALLED_APPS = [
     'apps.store.apps.StoreConfig',
 
     # Aditional packages
-    'rest_framework',
     'taggit',
     'crispy_forms',
     'crispy_bootstrap4',
