@@ -142,7 +142,7 @@ if not DEBUG:
 
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 
-MEDIA_ROOT = os.path.join(BASE_DIR, 'static/images')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'images/')
 
 MEDIA_URL = '/images/'
 

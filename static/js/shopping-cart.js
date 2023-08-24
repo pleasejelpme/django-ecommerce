@@ -14,7 +14,7 @@ function getBtnValues(btn) {
 function updateUserOrder(product_id, action){
     console.log('Sending data...')
 
-    fetch('http://localhost:8000/store/cart/', {
+    fetch('https://django-ecommerce-h01z.onrender.com/store/cart/', {
         method: 'POST',
         headers: {
             'Content-Type':'application/json',
