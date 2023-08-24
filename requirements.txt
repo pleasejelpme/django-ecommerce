@@ -6,6 +6,8 @@ django-extensions==3.2.3
 django-phonenumber-field==7.1.0
 django-taggit==4.0.0
 djangorestframework==3.14.0
+gunicorn==21.2.0
+packaging==23.1
 phonenumberslite==8.13.17
 Pillow==10.0.0
 psycopg2==2.9.6

@@ -5,6 +5,7 @@ from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required
+from django.core import serializers
 
 from .models import Product, Category, Order, ProductOrder
 from .forms import ProductCreateForm, CheckoutForm
@@ -21,10 +22,8 @@ def home(request):
             Q(tags__name=q)
         ).distinct()
 
-    categories = Category.objects.all()
     context = {
         'products': products,
-        'categories': categories,
     }
 
     # FUNCTIONALITY TO BE IMPLEMENTED: The "add to cart" button should not be
@@ -40,10 +39,8 @@ def home(request):
 
 
 def category_list(request):
-    context = {
-        'categories': Category.objects.all(),
-        'total_products': Product.objects.count(),
-    }
+    categories = Category.objects.all()
+    context = {'categories': categories}
     return render(request, 'offcanvas.html', context)
 
 
@@ -127,11 +124,11 @@ def shopping_cart(request):
         order, created = Order.objects.get_or_create(
             customer=customer, completed=False)
         products = list(order.productorder_set.all())
-
         context = {
             'order': order,
             'products': products
         }
+
         return render(request, 'store/shopping-cart.html', context)
 
 
